@@ -35,9 +35,12 @@ start_xvfb() {
 }
 
 prepare_node() {
+  git clone https://github.com/creationix/nvm.git --depth=1 ~/.nvm
   source ~/.nvm/nvm.sh
-  nvm install 4
-  nvm use 4
+  nvm install 7
+  nvm use 7
+  npm i macaca-android macaca-cli -g
+  macaca doctor
 }
 
 npm_install() {
@@ -49,19 +52,10 @@ show_info() {
   android list targets
 }
 
-download_and_extract() {
-  if [ -n "$CI_BUILD_REPO" ]; then
-    git clone $CI_BUILD_REPO /src
-  else
-    curl -o /tmp/src.tar.gz $SOURCE_CODE_URL
-    tar -C /src -xvf /tmp/src.tar.gz
-  fi
-}
-
 main() {
-  download_and_extract
   show_info
   start_xvfb
+  prepare_node
   start_emulator
   wait_for_emulator
   press_menu_key
