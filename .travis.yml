@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "6"
+  - 7
 sudo: required
 services:
   - docker
@@ -8,4 +8,3 @@ install:
   - echo Hello docker!
 script:
   - docker build . -t="macacajs/macaca-android-docker"
-  - docker run -it macacajs/macaca-android-docker
