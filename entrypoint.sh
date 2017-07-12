@@ -39,8 +39,6 @@ prepare_node() {
   source ~/.nvm/nvm.sh
   nvm install 7
   nvm use 7
-  npm i macaca-android macaca-cli -g
-  macaca doctor
 }
 
 npm_install() {
