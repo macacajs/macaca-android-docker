@@ -31,7 +31,7 @@ RUN echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licens
 
 RUN chown -R developer:developer $ANDROID_HOME
 
-RUN curl -o gradle-3.5-all.zip http://services.gradle.org/distributions/gradle-3.5-all.zip && unzip gradle-3.5-all.zip -d /usr/local > /dev/null
+RUN curl -o gradle-3.5-all.zip -L https://services.gradle.org/distributions/gradle-3.5-all.zip && unzip gradle-3.5-all.zip -d /usr/local > /dev/null
 
 ENV PATH=$GRADLE_HOME/bin:$PATH
 
