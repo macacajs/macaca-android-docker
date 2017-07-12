@@ -41,7 +41,7 @@ USER developer
 
 # sys-img-armeabi-v7a-android-22 sys-img-x86_64-android-22
 
-RUN echo y | android update sdk --proxy-host mirrors.neusoft.edu.cn --proxy-port 80 -s --all --filter build-tools-25.0.2,android-25,android-21,sys-img-armeabi-v7a-android-21,platform-tool,extra-android-support,extra-android-m2repository,extra-google-m2repository --no-ui --force
+RUN echo y | android update sdk --all --filter build-tools-25.0.2,android-25,android-21,sys-img-armeabi-v7a-android-21,platform-tool,extra-android-support,extra-android-m2repository,extra-google-m2repository --no-ui --force
 
 RUN echo n | android create avd --force -n test -t android-21 --abi armeabi-v7a
 
