@@ -45,7 +45,7 @@ RUN echo y | android update sdk --all --filter build-tools-25.0.2,android-25,and
 
 RUN android list target
 
-RUN echo n | android create avd --force -n test -t android-21 --abi default/x86
+RUN echo n | android create avd --force -n test -t android-21 --abi default/x86_64
 
 COPY ./entrypoint.sh /
 
