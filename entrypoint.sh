@@ -3,7 +3,7 @@
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 
 start_emulator() {
-  emulator -avd test -no-audio -no-window -memory 2048 -netfast -cpu-delay 0&# -no-boot-anim -gpu off &
+  emulator -avd test -no-audio -no-window -memory 2048 -netfast -cpu-delay 0 -no-boot-anim -no-accel &
 }
 
 wait_for_emulator() {
