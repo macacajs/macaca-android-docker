@@ -7,16 +7,16 @@
 
 ## Build Image
 
-``` bash
+```bash
 $ docker build . -t="macacajs/macaca-android-docker"
 ```
 
 ## Usage
 
-``` bash
+```bash
 $ docker run -it --entrypoint="/bin/bash" macacajs/macaca-android-docker
 ```
 
-``` bash
+```bash
 $ android update sdk --proxy-host mirrors.neusoft.edu.cn --proxy-port 80 -s
 ```
