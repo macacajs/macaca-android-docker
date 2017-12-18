@@ -87,12 +87,6 @@ RUN curl -o gradle-4.2-all.zip -L https://services.gradle.org/distributions/grad
 ENV PATH=$PATH:/opt/node-v6.11.4-linux-x64/bin
 RUN curl -o node-v6.11.4-linux-x64.tar.xz https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz && tar -C /opt -Jxvf node-v6.11.4-linux-x64.tar.xz > /dev/null
 
-# Global Installation
-# macaca cli, macaca-android, macaca-chrome, macaca-electron
-
-# cnpm i
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-
 # Run sshd
 RUN mkdir /var/run/sshd && \
     echo "root:$ROOTPASSWORD" | chpasswd && \

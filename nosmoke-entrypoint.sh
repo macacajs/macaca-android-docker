@@ -1,10 +1,9 @@
 #!/bin/bash
 
-cnpm i -g macaca-cli
-cnpm i -g macaca-android
-cnpm i macaca-electron -g
-cnpm i nosmoke -g
+npm i macaca-cli macaca-android macaca-electron nosmoke -g --registry=https://registry.npm.taobao.org
+
 macaca -v
+
 macaca doctor
 
 # Deprecated
