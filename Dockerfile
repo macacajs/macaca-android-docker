@@ -119,6 +119,6 @@ RUN mkdir /var/run/sshd && \
 RUN echo "y" | android update sdk -a --no-ui --filter sys-img-arm64-v8a-google_apis-25,Android-25
 
 # Add entrypoint
-ADD entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+# ADD entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
+# ENTRYPOINT ["/entrypoint.sh"]
