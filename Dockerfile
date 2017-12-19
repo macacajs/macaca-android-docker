@@ -87,12 +87,22 @@ RUN curl -o gradle-4.2-all.zip -L https://services.gradle.org/distributions/grad
 ENV PATH=$PATH:/opt/node-v6.11.4-linux-x64/bin
 RUN curl -o node-v6.11.4-linux-x64.tar.xz https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz && tar -C /opt -Jxvf node-v6.11.4-linux-x64.tar.xz > /dev/null
 
+RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN export CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/
+RUN cnpm i -g macaca-cli
+RUN cnpm i -g macaca-android
+RUN macaca -v
+RUN macaca doctor
+
+
 # Run sshd
 RUN mkdir /var/run/sshd && \
     echo "root:$ROOTPASSWORD" | chpasswd && \
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "export VISIBLE=now" >> /etc/profile
+
+RUN echo "y" | android update sdk -a --no-ui --filter sys-img-arm64-v8a-google_apis-25,Android-25
 
 # Add entrypoint
 ADD entrypoint.sh /entrypoint.sh
