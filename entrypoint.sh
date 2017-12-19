@@ -1,63 +1,62 @@
 #!/bin/bash
 
-export PATH=$ANDROID_HOME/platform-tools:$PATH
+npm i macaca-cli macaca-android macaca-electron nosmoke -g --registry=https://registry.npm.taobao.org
 
-start_emulator() {
-  emulator -avd test -no-audio -no-window -memory 2048 -netfast -cpu-delay 0 -no-boot-anim -no-accel &
-}
+macaca -v
 
-wait_for_emulator() {
-  echo "Waiting for emulator to start..."
+macaca doctor
 
-  bootanim=""
-  failcounter=0
-  until [[ "$bootanim" =~ "stopped" ]]; do
-    bootanim=`adb -e shell getprop init.svc.bootanim 2>&1`
-    if [[ "$bootanim" =~ "not found" ]]; then
-      let "failcounter += 1"
-      if [[ $failcounter -gt 3 ]]; then
-        echo "  Failed to start emulator"
-        exit 1
-      fi
-    fi
-    sleep 1
-  done
+# Deprecated
 
-  echo "emulator started"
-}
+if [[ $EMULATOR == "" ]]; then
+    EMULATOR="android-23"
+    echo "Using default emulator $EMULATOR"
+fi
 
-press_menu_key() {
-  adb shell input keyevent 82 &
-}
+if [[ $ARCH == "" ]]; then
+    ARCH="x86"
+    echo "Using default arch $ARCH"
+fi
+echo EMULATOR  = "Requested API: ${EMULATOR} (${ARCH}) emulator."
+if [[ -n $1 ]]; then
+    echo "Last line of file specified as non-opt/last argument:"
+    tail -1 $1
+fi
 
-start_xvfb() {
-  Xvfb :99 -ac -screen 0 1024x768x8 &
-}
+# Run sshd
+/usr/sbin/sshd
 
-prepare_node() {
-  git clone https://github.com/creationix/nvm.git --depth=1 ~/.nvm
-  source ~/.nvm/nvm.sh
-  nvm install 7
-  nvm use 7
-}
+# Detect ip and forward ADB ports outside to outside interface
+ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+socat tcp-listen:5037,bind=$ip,fork tcp:127.0.0.1:5037 &
+socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
+socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
 
-npm_install() {
-  npm install
-}
+# Set up and run emulator
+if [[ $ARCH == *"x86"* ]]
+then 
+    EMU="x86"
+else
+    EMU="arm"
+fi
 
-show_info() {
-  java -version
-  android list targets
-}
+echo "no" | android create avd -f -n test -t ${EMULATOR} --abi default/${ARCH}
+/usr/local/android-sdk/tools/mksdcard -l sd 128M /sdcard
 
-main() {
-  show_info
-  start_xvfb
-  prepare_node
-  start_emulator
-  wait_for_emulator
-  press_menu_key
-}
+# Run Macaca In Background
+macaca server &
 
-main
-exec "$@"
+# Run NoSmoke
+if [ $# -eq 0 ]
+then
+nosmoke -s
+elif [ $# -eq 1
+then
+nosmoke -s -c "$1"
+elif [ $# -eq 2 ]
+then
+nosmoke -s -c "$1" -h "$2"
+elif [ $# -eq 3 ]
+then
+nosmoke -s -c "$1" -h "$2" -u "$3"
+fi
