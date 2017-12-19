@@ -3,7 +3,7 @@
 export CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/
 export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
 
-npm i macaca-cli macaca-android macaca-electron nosmoke -g --registry=https://registry.npm.taobao.org
+≈
 
 macaca -v
 macaca doctor
