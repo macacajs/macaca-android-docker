@@ -16,7 +16,7 @@ EXPOSE 443
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# kvm env 
+# kvm env
 ENV RAM 2048
 ENV SMP 1
 ENV CPU qemu64
@@ -51,7 +51,7 @@ RUN apt-get update && \
     apt-get install -y python-dev python-pip  && \
     apt-get install -y apt-utils usbutils locales udev && \
     apt-get autoremove -y && \
-	apt-get clean
+    apt-get clean
 
 # Install packages needed for android sdk tools
 RUN dpkg --add-architecture i386 && \
@@ -119,4 +119,5 @@ ADD entrypoint.sh /entrypoint.sh
 ADD kvmconfig.sh /kvmconfig.sh
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /kvmconfig.sh
+
 # ENTRYPOINT ["/entrypoint.sh"]

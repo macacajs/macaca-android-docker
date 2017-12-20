@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/
+export CHROMEDRIVER_CDNURL=https://npm.taobao.org/mirrors/chromedriver/
 export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
 
 ≈
