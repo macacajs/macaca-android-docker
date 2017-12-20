@@ -113,6 +113,8 @@ RUN mkdir /var/run/sshd && \
 
 RUN echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-21,Android-21
 
+VOLUME /data
+
 ADD entrypoint.sh /entrypoint.sh
 ADD kvmconfig.sh /kvmconfig.sh
 RUN chmod +x /entrypoint.sh
