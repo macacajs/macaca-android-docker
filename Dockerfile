@@ -2,20 +2,6 @@ FROM ubuntu:16.04
 
 MAINTAINER Samuel "samuel.zhao.yue@live.com"
 
-ARG MACHINE_VERSION
-ARG GO_VERSION
-ENV GOPATH /go
-
-RUN apt-get update && apt-get install -y libvirt-dev curl git gcc
-RUN curl -sSL https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xzf -
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/go/bin
-RUN git clone --branch ${MACHINE_VERSION} https://github.com/docker/machine.git /go/src/github.com/docker/machine
-
-COPY . /go/src/github.com/dhiltgen/docker-machine-kvm
-WORKDIR /go/src/github.com/dhiltgen/docker-machine-kvm
-RUN go get -v -d ./...
-RUN go install -v ./cmd/docker-machine-driver-kvm
-
 # Specially for SSH access and port redirection
 ENV ROOTPASSWORD macaca
 
@@ -30,12 +16,34 @@ EXPOSE 443
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# kvm env 
+ENV RAM 2048
+ENV SMP 1
+ENV CPU qemu64
+ENV DISK_DEVICE scsi
+ENV IMAGE /data/disk-image
+ENV IMAGE_FORMAT qcow2
+ENV IMAGE_SIZE 10G
+ENV IMAGE_CACHE none
+ENV IMAGE_DISCARD unmap
+ENV IMAGE_CREATE 0
+ENV ISO_DOWNLOAD 0
+ENV NETWORK tap
+ENV VNC none
+ENV VNC_IP ""
+ENV VNC_ID 0
+ENV VNC_PORT 5500
+ENV VNC_SOCK /data/vnc.sock
+ENV TCP_PORTS ""
+ENV UDP_PORTS ""
+
 WORKDIR /root
 
 #COPY ./etc/apt/sources.list_backup /etc/apt/sources.list
 #RUN apt update
 
 RUN apt-get update && \
+    apt-get install -y qemu-kvm qemu-utils bridge-utils dnsmasq uml-utilities iptables wget net-tools && \
     apt-get install -y build-essential git vim make zip unzip curl wget bzip2 ssh openssh-server socat && \
     apt-get install -y openjdk-8-jdk && \
     apt-get install -y software-properties-common && \
@@ -49,19 +57,6 @@ RUN apt-get update && \
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get -y install libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386
-
-# Install Ant version specified above and Set the environment variable for Ant
-# ENV ANT_VERSION 1.9.4
-# ENV ANT_HOME /opt/ant
-# ENV PATH ${PATH}:/opt/ant/bin
-# RUN wget -q http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
-#     tar -xzf apache-ant-${ANT_VERSION}-bin.tar.gz && \
-#     mv apache-ant-${ANT_VERSION} /opt/ant && \
-#     rm apache-ant-${ANT_VERSION}-bin.tar.gz
-
-# Set the environment variable for Ant
-# ENV ANT_HOME /opt/ant
-# ENV PATH ${PATH}:/opt/ant/bin
 
 # Java Environment Path
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -105,9 +100,9 @@ RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
 RUN export CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/
 RUN cnpm i -g macaca-cli
 RUN cnpm i -g macaca-android
+RUN cnpm i -g nosmoke
 RUN macaca -v
 RUN macaca doctor
-
 
 # Run sshd
 RUN mkdir /var/run/sshd && \
@@ -116,9 +111,10 @@ RUN mkdir /var/run/sshd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo "y" | android update sdk -a --no-ui --filter sys-img-arm64-v8a-google_apis-25,Android-25
+RUN echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-21,Android-21
 
-# Add entrypoint
-# ADD entrypoint.sh /entrypoint.sh
-# RUN chmod +x /entrypoint.sh
+ADD entrypoint.sh /entrypoint.sh
+ADD kvmconfig.sh /kvmconfig.sh
+RUN chmod +x /entrypoint.sh
+RUN chmod +x /kvmconfig.sh
 # ENTRYPOINT ["/entrypoint.sh"]
