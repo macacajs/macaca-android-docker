@@ -100,8 +100,6 @@ RUN mkdir /var/run/sshd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-23,Android-23
-
 VOLUME /data
 
 ADD nosmoke.sh /nosmoke.sh
