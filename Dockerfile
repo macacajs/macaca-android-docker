@@ -84,7 +84,7 @@ RUN echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licens
 # Install Android Build Tools and the required version of Android SDK
 # You can create several versions of the Dockerfile if you need to test several versions
 RUN ( sleep 4 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --force -a --filter \
-    platform-tool,android-25,android-26,build-tools-25.0.2,build-tools-26.0.1,extra-android-support,extra-android-m2repository,extra-google-m2repository && \
+    platform-tool,build-tools-25.0.2,build-tools-26.0.1,extra-android-support,extra-android-m2repository,extra-google-m2repository && \
     echo "y" | android update adb
 
 # Gradle 4.2
@@ -93,12 +93,6 @@ ENV PATH=$GRADLE_HOME/bin:$PATH
 
 RUN curl -o gradle-4.2-all.zip -L https://services.gradle.org/distributions/gradle-4.2-all.zip && unzip gradle-4.2-all.zip -d /usr/local > /dev/null
 
-# Nodejs Environment Path
-ENV PATH=$PATH:/opt/node-v6.11.4-linux-x64/bin
-RUN curl -o node-v6.11.4-linux-x64.tar.xz https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz && tar -C /opt -Jxvf node-v6.11.4-linux-x64.tar.xz > /dev/null
-
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-
 # Run sshd
 RUN mkdir /var/run/sshd && \
     echo "root:$ROOTPASSWORD" | chpasswd && \
@@ -106,7 +100,7 @@ RUN mkdir /var/run/sshd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-21,Android-21
+RUN echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-23,Android-23
 
 VOLUME /data
 
