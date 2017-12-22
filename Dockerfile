@@ -112,8 +112,11 @@ VOLUME /data
 
 ADD nosmoke.sh /nosmoke.sh
 ADD kvmconfig.sh /kvmconfig.sh
+ADD macaca-sample.sh /macaca-sample.sh
+
 RUN chmod +x /nosmoke.sh
 RUN chmod +x /kvmconfig.sh
+RUN chmod +x /macaca-sample.sh
 
 # Config Your Customised EntryPoint Like:
 # ENTRYPOINT [“/nosmoke.sh"]
