@@ -3,11 +3,11 @@
 export CHROMEDRIVER_CDNURL=https://npm.taobao.org/mirrors/
 export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
 
-RUN cnpm i -g macaca-cli
-RUN cnpm i -g macaca-android
-RUN cnpm i -g nosmoke
-RUN macaca -v
-RUN macaca doctor
+cnpm i -g macaca-cli
+cnpm i -g macaca-android
+cnpm i -g nosmoke
+macaca -v
+macaca doctor
 
 echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-23,Android-23
 echo "no" | android create avd -f -n test -t android-23 --abi default/x86_64
