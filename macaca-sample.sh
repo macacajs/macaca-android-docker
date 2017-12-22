@@ -11,6 +11,7 @@ install_macaca() {
     export CHROMEDRIVER_CDNURL=https://npm.taobao.org/mirrors/
     export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
 
+    npm install -g cnpm --registry=https://registry.npm.taobao.org
     cnpm i -g macaca-cli
     cnpm i -g macaca-android
     macaca -v
@@ -18,6 +19,7 @@ install_macaca() {
 }
 
 install_emulator() {
+    android list targets
     echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-23,Android-23
     echo "no" | android create avd -f -n test -t android-23 --abi default/x86_64
     emulator64-x86 -avd test -noaudio -no-window  -verbose -qemu &
