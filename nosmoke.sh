@@ -1,10 +1,5 @@
 #!/bin/bash
 
-export CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/
-export ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
-
-≈
-
 macaca -v
 macaca doctor
 
@@ -13,9 +8,6 @@ macaca doctor
 
 # Detect ip and forward ADB ports outside to outside interface
 ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
-
-echo "no" | android create avd -f -n test -t ${EMULATOR} --abi default/${ARCH}
-/usr/local/android-sdk/tools/mksdcard -l sd 128M /sdcard
 
 # Run Macaca In Background
 macaca server &

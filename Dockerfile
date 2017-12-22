@@ -16,7 +16,7 @@ EXPOSE 443
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# kvm env 
+# kvm env
 ENV RAM 2048
 ENV SMP 1
 ENV CPU qemu64
@@ -26,7 +26,7 @@ ENV IMAGE_FORMAT qcow2
 ENV IMAGE_SIZE 10G
 ENV IMAGE_CACHE none
 ENV IMAGE_DISCARD unmap
-ENV IMAGE_CREATE 0
+ENV IMAGE_CREATE 1
 ENV ISO_DOWNLOAD 0
 ENV NETWORK tap
 ENV VNC none
@@ -36,6 +36,10 @@ ENV VNC_PORT 5500
 ENV VNC_SOCK /data/vnc.sock
 ENV TCP_PORTS ""
 ENV UDP_PORTS ""
+
+# dependency preconfig
+ENV CHROMEDRIVER_CDNURL=https://npm.taobao.org/mirrors/
+ENV ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/
 
 WORKDIR /root
 
@@ -51,7 +55,7 @@ RUN apt-get update && \
     apt-get install -y python-dev python-pip  && \
     apt-get install -y apt-utils usbutils locales udev && \
     apt-get autoremove -y && \
-	apt-get clean
+    apt-get clean
 
 # Install packages needed for android sdk tools
 RUN dpkg --add-architecture i386 && \
@@ -83,9 +87,6 @@ RUN ( sleep 4 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --
     platform-tool,android-25,android-26,build-tools-25.0.2,build-tools-26.0.1,extra-android-support,extra-android-m2repository,extra-google-m2repository && \
     echo "y" | android update adb
 
-# RUN which adb
-# RUN which android
-
 # Gradle 4.2
 ENV GRADLE_HOME=/usr/local/gradle-4.2
 ENV PATH=$GRADLE_HOME/bin:$PATH
@@ -97,12 +98,6 @@ ENV PATH=$PATH:/opt/node-v6.11.4-linux-x64/bin
 RUN curl -o node-v6.11.4-linux-x64.tar.xz https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz && tar -C /opt -Jxvf node-v6.11.4-linux-x64.tar.xz > /dev/null
 
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-RUN export CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/
-RUN cnpm i -g macaca-cli
-RUN cnpm i -g macaca-android
-RUN cnpm i -g nosmoke
-RUN macaca -v
-RUN macaca doctor
 
 # Run sshd
 RUN mkdir /var/run/sshd && \
@@ -115,8 +110,10 @@ RUN echo "y" | android update sdk -a --no-ui --filter sys-img-x86_64-android-21,
 
 VOLUME /data
 
-ADD entrypoint.sh /entrypoint.sh
+ADD nosmoke.sh /nosmoke.sh
 ADD kvmconfig.sh /kvmconfig.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /nosmoke.sh
 RUN chmod +x /kvmconfig.sh
-# ENTRYPOINT ["/entrypoint.sh"]
+
+# Config Your Customised EntryPoint Like:
+# ENTRYPOINT [“/nosmoke.sh"]
