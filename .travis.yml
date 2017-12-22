@@ -8,3 +8,4 @@ install:
   - echo Hello docker!
 script:
   - docker build . -t="macacajs/macaca-android-docker"
+  - docker run --privileged --cap-add=ALL --entrypoint=/macaca-sample.sh -p 5037:5037 -it macacajs/macaca-android-docker
