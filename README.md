@@ -5,10 +5,16 @@
 [travis-image]: https://img.shields.io/travis/macacajs/macaca-android-docker.svg?style=flat-square
 [travis-url]: https://travis-ci.org/macacajs/macaca-android-docker
 
-## Build Image
+## Macaca Tools Image
 
 ```bash
 $ docker build . -t="macacajs/macaca-android-docker"
+```
+
+## Only For Build
+
+```bash
+$ docker build ./build -t="macacajs/macaca-android-docker-build"
 ```
 
 ## Usage
