@@ -56,7 +56,13 @@ RUN curl -o gradle-4.6-bin.zip -L https://services.gradle.org/distributions/grad
     && rm gradle-4.6-bin.zip
 
 # Node.js
-ENV NODE_VERSION=8.11.2
+ENV NODE_VERSION=8.11.2 \
+    NODE_REGISTRY=https://npm.taobao.org/mirrors/node \
+    CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver/ \
+    ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ \
+    JAVA_HOME='/usr/lib/jvm/java-8-openjdk-amd64' \
+    DISPLAY=':99.0' \
+    NODE_IN_DOCKER=1
 
 RUN curl -SLO "$NODE_REGISTRY/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
       && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
