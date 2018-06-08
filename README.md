@@ -14,7 +14,7 @@ $ docker build . -t="macacajs/macaca-android-docker"
 ## Only For Build
 
 ```bash
-$ docker build ./build -t="macacajs/macaca-android-docker-build"
+$ docker build ./build -t="macacajs/macaca-android-build-docker"
 ```
 
 ## Usage
